@@ -33,7 +33,7 @@ public class Percolation
 		
 		for (int k = 0; k < neighbors.length; ++k)
 		{
-			if (neighbors[k].i != 0 || neighbors[k].j != 0)
+			if (neighbors[k] != null)
 			{
 				int neighborCoord = ConvertTwo2OneDemIndex(neighbors[k].i, 
 						neighbors[k].j);
@@ -142,7 +142,7 @@ public class Percolation
 	
 	private int ConvertTwo2OneDemIndex(int i, int j)
 	{
-		return (i - 1) * N_ + (j - 1);
+		return i * N_ + j;
 	}
 
 	private int N_;
