@@ -14,13 +14,21 @@ public class Percolation
 		N_ = n + 2;
 		fields_ = new int[N_][N_];
         uf_ = new WeightedQuickUnionUF(N_ * N_);
+//        int lastLine = N_ * (N_ - 1) - 1;
+        int lastLine = ConvertTwo2OneDemIndex(N_ - 1, 0);
 
         // init high and low lines
-		for (int j = 1; j < N_ - 1; ++j) 
+		for (int j = 0; j < N_; ++j) 
 		{
             fields_[0][j] = 1;
+            uf_.union(0, j);
             fields_[N_ - 1][j] = 1;
+            uf_.union(lastLine + 1, lastLine + j);
 		}
+		
+		int checkBound1 = 0;
+		int checkBound2 = N_ - 1;
+		assert(uf_.connected(checkBound1, checkBound2));
     }
 
 	public void Open(int i, int j) 
@@ -93,7 +101,7 @@ public class Percolation
     }
 	public boolean Percolates()  { return true; }
 	
-	void Validate(int index)
+	private void Validate(int index)
 	{
 		if (index > N_ || index < 1)
         {
@@ -147,9 +155,9 @@ public class Percolation
 
 	private int N_;
 	private int[][] fields_;
-    WeightedQuickUnionUF uf_;
+    private WeightedQuickUnionUF uf_;
 	
-	public void PrintArray()
+	void PrintArray()
 	{
 		for (int[] is : fields_) 
 		{
