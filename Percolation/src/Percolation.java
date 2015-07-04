@@ -23,12 +23,16 @@ public class Percolation
             fields_[0][j] = 1;
             uf_.union(0, j);
             fields_[N_ - 1][j] = 1;
-            uf_.union(lastLine + 1, lastLine + j);
+            uf_.union(lastLine, lastLine + j);
 		}
 		
 		int checkBound1 = 0;
 		int checkBound2 = N_ - 1;
 		assert(uf_.connected(checkBound1, checkBound2));
+
+		int checkBound3 = lastLine;
+		int checkBound4 = ConvertTwo2OneDemIndex(N_ - 1, N_ - 1);
+		assert(uf_.connected(checkBound3, checkBound4));
     }
 
 	public void Open(int i, int j) 
@@ -182,7 +186,9 @@ public class Percolation
 		perc.PrintArray();
 		
 		
-        System.out.print("is site full = " + perc.IsFull(2, 1));
+        System.out.println("is site full = " + perc.IsFull(2, 1));
+        System.out.println("is site full = " + perc.IsFull(2, 2));
+        
 
 		
 		
