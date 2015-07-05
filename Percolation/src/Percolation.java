@@ -39,8 +39,8 @@ public class Percolation
 	{
 		Validate(i);
 		Validate(j);
-		// Convert two-dimensional array index to one-dimensional
 		CoordPair[] neighbors = GetNeighbors(i, j); 
+		// Convert two-dimensional array index to one-dimensional
 		int oneDemArrayIndex = ConvertTwo2OneDemIndex(i, j);
 		
 		for (int k = 0; k < neighbors.length; ++k)
@@ -50,10 +50,7 @@ public class Percolation
 				int neighborCoord = ConvertTwo2OneDemIndex(neighbors[k].i, 
 						neighbors[k].j);
 				
-                if (!uf_.connected(oneDemArrayIndex, neighborCoord))
-                {
-                    uf_.union(oneDemArrayIndex, neighborCoord);
-                }
+                uf_.union(oneDemArrayIndex, neighborCoord);
 			}
 		}
 		
@@ -74,6 +71,15 @@ public class Percolation
 		ValidateOutBounds(j);
 
 		return fields_[i][j] == 1;
+	}
+
+	private void Validate(int index)
+	{
+		if (index > N_ || index < 1)
+        {
+			throw new IndexOutOfBoundsException("row index " + index + 
+					" is out of bounds");
+        }
 	}
 	
 	private void ValidateOutBounds(int index)
@@ -104,15 +110,6 @@ public class Percolation
 		return isFull; 
     }
 	public boolean Percolates()  { return true; }
-	
-	private void Validate(int index)
-	{
-		if (index > N_ || index < 1)
-        {
-			throw new IndexOutOfBoundsException("row index " + index + 
-					" is out of bounds");
-        }
-	}
 	
 	private CoordPair[] GetNeighbors(int i, int j)
 	{
