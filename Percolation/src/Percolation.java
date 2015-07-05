@@ -10,11 +10,11 @@ public class Percolation
 	{
 		if (n < 1)
 			throw new java.lang.IllegalArgumentException();
-//		
+		//TODO: 1 site example 
+		// Add high and low lines
 		N_ = n + 2;
 		fields_ = new int[N_][N_];
         uf_ = new WeightedQuickUnionUF(N_ * N_);
-//        int lastLine = N_ * (N_ - 1) - 1;
         int lastLine = ConvertTwo2OneDemIndex(N_ - 1, 0);
 
         // init high and low lines
