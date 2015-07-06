@@ -1,4 +1,3 @@
-import java.security.PermissionCollection;
 
 public class PercolationStats 
 {
@@ -10,17 +9,17 @@ public class PercolationStats
     	fractions_ = new double[T];
     	int sitesCount = N * N;
     	
-        for (int i = 0; i < T; ++i)
+        for (int experementsCounter = 0; experementsCounter < T; ++experementsCounter)
         {
         	Percolation perc = new Percolation(N);
         	
-        	for (int j = 0; j < sitesCount; ++j) 
+        	for (int countsOfTry = 0; countsOfTry < sitesCount; ++countsOfTry) 
         	{
                 Percolation.CoordPair pair = ConvertOne2TwoDemIndex(StdRandom.uniform(N), N);
 
                 while (perc.isOpen(pair.i, pair.j))
                 {
-                    pair = ConvertOne2TwoDemIndex(StdRandom.uniform(N), N);
+                    pair = ConvertOne2TwoDemIndex(StdRandom.uniform(sitesCount), N);
                 }
 
                 perc.open(pair.i, pair.j);
@@ -28,7 +27,8 @@ public class PercolationStats
                 
                 if (perc.percolates())
                 {
-                    fractions_[i] = i / sitesCount;
+                	double rate = (double)countsOfTry / (double)sitesCount;
+                    fractions_[experementsCounter] = rate;
                     break;
                 }
         	}
