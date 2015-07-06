@@ -1,6 +1,6 @@
 public class Percolation 
 {
-	class CoordPair
+	public static class CoordPair
 	{
 		int i;
 		int j;
@@ -35,7 +35,7 @@ public class Percolation
 		assert(uf_.connected(checkBound3, checkBound4));
     }
 
-	public void Open(int i, int j) 
+	public void open(int i, int j) 
 	{
 		Validate(i);
 		Validate(j);
@@ -57,7 +57,7 @@ public class Percolation
         fields_[i][j] = 1;
 	}
 
-	boolean IsOpen(int i, int j) 
+	public boolean isOpen(int i, int j) 
 	{ 
 		Validate(i);
 		Validate(j);
@@ -88,7 +88,7 @@ public class Percolation
 			throw new IndexOutOfBoundsException("row index is out of bounds");
 	}
 
-	boolean IsFull(int i, int j) 
+	public boolean isFull(int i, int j) 
 	{ 
 		Validate(i);
 		Validate(j);
@@ -109,7 +109,7 @@ public class Percolation
 		
 		return isFull; 
     }
-	public boolean Percolates()  { return true; }
+	public boolean percolates()  { return uf_.connected(0, N_ * N_ - 1); }
 	
 	private CoordPair[] GetNeighbors(int i, int j)
 	{
@@ -175,32 +175,15 @@ public class Percolation
 	public static void main(String[] args) 
 	{
 		
-		Percolation perc = new Percolation(2);
-		perc.PrintArray();
-		perc.Open(1, 1);
-		perc.Open(2, 2);
-		perc.Open(1, 2);
-		perc.PrintArray();
-		
-		
-        System.out.println("is site full = " + perc.IsFull(2, 1));
-        System.out.println("is site full = " + perc.IsFull(2, 2));
-        
-
-		
-		
-		
-
-//		WeightedQuickUnionUF uf = new WeightedQuickUnionUF(15);
-//		uf.union(0, 3);
-//		if (uf.connected(0, 3))
-//        {
-//            System.out.println("1 4 is connected!");
-//        }
+//		Percolation perc = new Percolation(2);
+//		perc.PrintArray();
+//		perc.Open(1, 1);
+////		perc.Open(2, 2);
+//		perc.Open(1, 2);
+//		perc.PrintArray();
 //		
-//		if (!uf.connected(2, 3))
-//		{
-//            System.out.println("2 3 is not connected!"); 
-//		}
+//        System.out.println("is site full = " + perc.IsFull(2, 1));
+//        System.out.println("is site full = " + perc.IsFull(2, 2));
+//        System.out.println("is percolates = " + perc.Percolates());
 	}
 }
