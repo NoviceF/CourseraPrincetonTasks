@@ -6,16 +6,19 @@ public class PercolationStats
     	if (N <= 0 || T <= 0)
     		throw new java.lang.IllegalArgumentException();
     	
-    	fractions_ = new double[T];
+    	TimesToRun_ = T;
+    	fractions_ = new double[TimesToRun_];
     	int sitesCount = N * N;
     	
-        for (int experementsCounter = 0; experementsCounter < T; ++experementsCounter)
+        for (int experementsCounter = 0; experementsCounter < TimesToRun_;
+        		++experementsCounter)
         {
         	Percolation perc = new Percolation(N);
         	
         	for (int countsOfTry = 0; countsOfTry < sitesCount; ++countsOfTry) 
         	{
-                Percolation.CoordPair pair = ConvertOne2TwoDemIndex(StdRandom.uniform(N), N);
+                Percolation.CoordPair pair = 
+                		ConvertOne2TwoDemIndex(StdRandom.uniform(N), N);
 
                 while (perc.isOpen(pair.i, pair.j))
                 {
@@ -23,7 +26,7 @@ public class PercolationStats
                 }
 
                 perc.open(pair.i, pair.j);
-                perc.PrintArray();
+//                perc.PrintArray();
                 
                 if (perc.percolates())
                 {
@@ -47,26 +50,29 @@ public class PercolationStats
 
     public double mean()                      // sample mean of percolation threshold
     {
-    	return 0.0;
+    	return StdStats.mean(fractions_);
     }
     	
     public double stddev()                    // sample standard deviation of percolation threshold
     {
-    	return 0.0;
-    	
+    	return StdStats.stddev(fractions_);
     }
+
     public double confidenceLo()              // low  endpoint of 95% confidence interval
     {
-    	return 0.0;
-    	
+    	double mean = mean();
+    	double stdDev = stddev();
+    	return mean - (1.96 * stdDev / Math.sqrt(TimesToRun_));
     }
     public double confidenceHi()              // high endpoint of 95% confidence interval
     {
-    	return 0.0;
-    	
+    	double mean = mean();
+    	double stdDev = stddev();
+    	return mean + (1.96 * stdDev) / Math.sqrt(TimesToRun_);
     }
     
     private double fractions_[];
+    private int TimesToRun_;
 
     public static void main(String[] args) 
     {
@@ -83,6 +89,10 @@ public class PercolationStats
 
         PercolationStats stats = new PercolationStats(N, T);
         
-    	
+
+        System.out.println("mean = " + stats.mean());
+        System.out.println("stddev = " + stats.stddev());
+        System.out.println("95% confidence interval = " + stats.confidenceLo() +
+        		", " + stats.confidenceHi());
 	}
 }
