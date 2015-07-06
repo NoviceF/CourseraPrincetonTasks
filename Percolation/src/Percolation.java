@@ -1,6 +1,6 @@
 public class Percolation 
 {
-	public static class CoordPair
+	private class CoordPair
 	{
 		int i;
 		int j;
@@ -158,7 +158,7 @@ public class Percolation
 	private int[][] fields_;
     private WeightedQuickUnionUF uf_;
 	
-	void PrintArray()
+	private void PrintArray()
 	{
 		for (int[] is : fields_) 
 		{

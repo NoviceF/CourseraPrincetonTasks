@@ -1,6 +1,12 @@
 
 public class PercolationStats 
 {
+	private class CoordPair
+	{
+		int i;
+		int j;
+	}
+
     public PercolationStats(int N, int T)     // perform T independent experiments on an N-by-N grid
     {
     	if (N <= 0 || T <= 0)
@@ -17,7 +23,7 @@ public class PercolationStats
         	
         	for (int countsOfTry = 0; countsOfTry < sitesCount; ++countsOfTry) 
         	{
-                Percolation.CoordPair pair = 
+                CoordPair pair = 
                 		ConvertOne2TwoDemIndex(StdRandom.uniform(N), N);
 
                 while (perc.isOpen(pair.i, pair.j))
@@ -38,9 +44,9 @@ public class PercolationStats
         }
     }
     
-    private Percolation.CoordPair ConvertOne2TwoDemIndex(int i, int n)
+    private CoordPair ConvertOne2TwoDemIndex(int i, int n)
     {
-    	Percolation.CoordPair pair = new Percolation.CoordPair();
+    	CoordPair pair = new CoordPair();
     	// because index start from 1
     	pair.i = i / n + 1;
     	pair.j = i % n + 1;
