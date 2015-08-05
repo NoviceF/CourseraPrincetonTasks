@@ -4,6 +4,8 @@ public class Deque<Item> //implements Iterable<Item>
 	// construct an empty deque
 	public Deque() {
 		data_ = (Item[]) new Object[capacity_];
+		head_ = GetInsertIndex();
+		tail_ = head_;
 	}
 
 	// is the deque empty?
@@ -117,10 +119,12 @@ public class Deque<Item> //implements Iterable<Item>
 
 	private int GetInsertIndex() {
 		assert capacity_ != 0;
-		assert size() != 0;
 		
 		int capMid = capacity_ / 2;
-		int sizeMid = size() / 2;
+		int sizeMid = 0;
+
+		if (size() != 0)
+			sizeMid = size() / 2;
 
 		assert capMid > sizeMid;
 		
@@ -134,9 +138,14 @@ public class Deque<Item> //implements Iterable<Item>
 		else
 			return true;
 	}
+	
+	int getCap()
+	{
+		return capacity_;
+	}
 
 	private Item[] data_;
-	private int capacity_ = 2;
+	private int capacity_ = 4;
 	private int head_ = 0;
 	private int tail_ = 0;
 	private int growMultipler_ = 3;
@@ -145,17 +154,23 @@ public class Deque<Item> //implements Iterable<Item>
 	{
 		Deque<Integer> deq = new Deque<Integer>();
 		assert deq.isEmpty();
-		deq.addFirst(1);
-		deq.addFirst(2);
+		int baseCap = 4;
+		assert deq.getCap() == baseCap;
+		int first = 1;
+		int second = 2;
+		deq.addFirst(first);
+		deq.addFirst(second);
 		int size = deq.size();
 		assert size == 2;
 		assert !deq.isEmpty();
-		deq.removeFirst();
+		int removed = deq.removeFirst();
 		assert deq.size() == 1;
-		deq.addFirst(1);
-		deq.removeLast();
+		assert removed == first;
+		deq.addFirst(first);
+		removed = deq.removeLast();
+		assert removed == second;
 		assert deq.size() == 1;
 		deq.addLast(2);
-
+		assert deq.getCap() == baseCap;
 	}
 }
