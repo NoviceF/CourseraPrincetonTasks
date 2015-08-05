@@ -1,6 +1,35 @@
+import java.util.Iterator;
 
 public class Deque<Item> //implements Iterable<Item> 
  {
+	public class DeqItertor<T> implements Iterator<T>
+	{
+		T[] array_;
+		int head_;
+		int tail_;
+		int curPos;
+		
+		public DeqItertor(Deque<T> deque) {
+			array_ = deque.data_;
+			head_ = deque.head_;
+			tail_ = deque.tail_;
+			curPos = head_;
+		}
+	    public boolean hasNext() {
+	    	return curPos < tail_;
+	    }
+
+	    public T next() {
+	    	if (!hasNext())
+	    		throw new java.util.NoSuchElementException();
+
+	    	return array_[curPos++];
+	    }
+	    
+	    public void remove() {
+	    	throw new  java.lang.UnsupportedOperationException();
+	    }
+	}
 	// construct an empty deque
 	public Deque() {
 		data_ = (Item[]) new Object[capacity_];
@@ -79,8 +108,9 @@ public class Deque<Item> //implements Iterable<Item>
 	}
 
 //	// return an iterator over items in order from front to end
-//	public Iterator<Item> iterator() {
-//	}
+	public Iterator<Item> iterator() {
+		
+	}
 
 	private void resize() {
 		Item[] oldData_ = data_;
