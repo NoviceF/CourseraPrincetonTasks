@@ -106,35 +106,48 @@ public class Deque<Item> //implements Iterable<Item>
 		int size = size();
 
 		Item[] oldData_ = data_;
+		capacity_ /= shrinkDevider_;
 		data_ = (Item[]) new Object[capacity_];
 
 		int insertIndex = GetInsertIndex();
-		assert capacity_ - insertIndex > size;
+		assert capacity_ - insertIndex >= size;
+		int sequenceLen = insertIndex + size;
 
-		for (int i = insertIndex; i < size; ++i)
-			data_[i] = oldData_[i];
+		for (int i = insertIndex, j = head_; i < sequenceLen; ++i, ++j)
+			data_[i] = oldData_[j];
 
 		head_ = insertIndex;
 		tail_ = head_ + size;
 	}
 
 	private int GetInsertIndex() {
-		assert capacity_ != 0;
+		int size = size();
+
+		assert capacity_ >= size;
+		
+		if (capacity_ == 1 || capacity_ == size) 
+			return 0;
 		
 		int capMid = capacity_ / 2;
 		int sizeMid = 0;
 
-		if (size() != 0)
-			sizeMid = size() / 2 + 1;
 
-		assert capMid > sizeMid;
+		if (size > 1 && (size / 2 < capacity_ /2))
+			sizeMid = size / 2 + 1;
+
+		assert capMid >= sizeMid;
 		
 		return capMid - sizeMid;
 	}
 	
 	private boolean isNeedToTrim()
 	{
-		if (capacity_ / size() < growMultipler_ * 2)
+		int size = size();
+		
+		if (size == 0)
+			return false;
+
+		if (capacity_ / size < shrinkBorder_)
 			return false;
 		else
 			return true;
@@ -155,6 +168,8 @@ public class Deque<Item> //implements Iterable<Item>
 	private int head_ = 0;
 	private int tail_ = 0;
 	private int growMultipler_ = 3;
+	private int shrinkBorder_ = 4;
+	private int shrinkDevider_ = 4;
 
 	public static void main(String[] args) // unit testing
 	{
@@ -172,19 +187,41 @@ public class Deque<Item> //implements Iterable<Item>
 		int removed = deq.removeFirst();
 		assert deq.size() == 1;
 		assert removed == first;
+		int oldCap = deq.getCap();
 		deq.addFirst(first);
 		removed = deq.removeLast();
+		assert deq.getCap() == oldCap * deq.getGrowMultipler();
 		assert removed == second;
 		assert deq.size() == 1;
-		deq.addLast(2);
-		assert deq.getCap() == baseCap;
 		
-		int oldCap = deq.getCap();
 		int third = 3;
 		int fourth = 4;
 		deq.addLast(third);
 		deq.addLast(fourth);
-		assert deq.getCap() == oldCap * deq.getGrowMultipler();
-		assert deq.size() == 4;
+		assert deq.size() == 3;
+		deq.removeLast();
+		deq.removeLast();
+		deq.removeLast();
+		
+		deq.addFirst(first);
+		deq.addFirst(second);
+		deq.addFirst(third);
+
+		deq.removeFirst();
+		deq.removeFirst();
+		deq.removeFirst();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
