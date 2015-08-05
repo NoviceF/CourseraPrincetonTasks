@@ -136,13 +136,26 @@ public class Deque<Item> //implements Iterable<Item>
 	}
 
 	private Item[] data_;
-	private int capacity_ = 10;
+	private int capacity_ = 2;
 	private int head_ = 0;
 	private int tail_ = 0;
 	private int growMultipler_ = 3;
 
 	public static void main(String[] args) // unit testing
 	{
+		Deque<Integer> deq = new Deque<Integer>();
+		assert deq.isEmpty();
+		deq.addFirst(1);
+		deq.addFirst(2);
+		int size = deq.size();
+		assert size == 2;
+		assert !deq.isEmpty();
+		deq.removeFirst();
+		assert deq.size() == 1;
+		deq.addFirst(1);
+		deq.removeLast();
+		assert deq.size() == 1;
+		deq.addLast(2);
 
 	}
 }
