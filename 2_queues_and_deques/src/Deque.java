@@ -41,11 +41,11 @@ public class Deque<Item> //implements Iterable<Item>
 			throw new java.lang.NullPointerException();
 		}
 		
-		if (tail_ == 0) {
+		if (tail_ == data_.length) {
 			resize();
 		}
 		
-		data_[++tail_] = item;
+		data_[tail_++] = item;
 	} 
 
 	// remove and return the item from the front
@@ -69,7 +69,7 @@ public class Deque<Item> //implements Iterable<Item>
 		if (isEmpty())
 			throw new java.util.NoSuchElementException();
 		
-		Item ret = data_[tail_--];
+		Item ret = data_[--tail_];
 		
 		if (isNeedToTrim())
 			trimCapacity();
@@ -91,12 +91,13 @@ public class Deque<Item> //implements Iterable<Item>
 		
 		int insertIndex = GetInsertIndex();
 		assert capacity_ - insertIndex > size;
+		int sequenceLen = insertIndex + size;
 
-		for (int i = insertIndex; i < size; ++i)
-			data_[i] = oldData_[i];
+		for (int i = insertIndex, j = head_; i < sequenceLen; ++i, ++j)
+			data_[i] = oldData_[j];
 		
 		head_ = insertIndex;
-		tail_ = head_ + size;
+		tail_ = sequenceLen;
 	}
 	
 	private void trimCapacity() {
@@ -124,7 +125,7 @@ public class Deque<Item> //implements Iterable<Item>
 		int sizeMid = 0;
 
 		if (size() != 0)
-			sizeMid = size() / 2;
+			sizeMid = size() / 2 + 1;
 
 		assert capMid > sizeMid;
 		
@@ -143,6 +144,11 @@ public class Deque<Item> //implements Iterable<Item>
 	{
 		return capacity_;
 	}
+	
+	int getGrowMultipler()
+	{
+		return growMultipler_;
+	}
 
 	private Item[] data_;
 	private int capacity_ = 4;
@@ -159,7 +165,7 @@ public class Deque<Item> //implements Iterable<Item>
 		int first = 1;
 		int second = 2;
 		deq.addFirst(first);
-		deq.addFirst(second);
+		deq.addLast(second);
 		int size = deq.size();
 		assert size == 2;
 		assert !deq.isEmpty();
@@ -172,5 +178,13 @@ public class Deque<Item> //implements Iterable<Item>
 		assert deq.size() == 1;
 		deq.addLast(2);
 		assert deq.getCap() == baseCap;
+		
+		int oldCap = deq.getCap();
+		int third = 3;
+		int fourth = 4;
+		deq.addLast(third);
+		deq.addLast(fourth);
+		assert deq.getCap() == oldCap * deq.getGrowMultipler();
+		assert deq.size() == 4;
 	}
 }
