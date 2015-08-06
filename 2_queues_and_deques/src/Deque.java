@@ -3,12 +3,12 @@ import java.util.Iterator;
 
 public class Deque<Item> //implements Iterable<Item> 
  {
-	public class DeqItertor<T> implements Iterator<T>
+	private class DeqItertor<T> implements Iterator<T>
 	{
-		T[] array_;
-		int head_;
-		int tail_;
-		int curPos;
+		private T[] array_;
+		private int head_;
+		private int tail_;
+		private int curPos;
 		
 		public DeqItertor(Deque<T> deque) {
 			array_ = (T[])deque.data_;
