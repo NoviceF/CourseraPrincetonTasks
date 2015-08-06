@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.util.Iterator;
 
 public class Deque<Item> //implements Iterable<Item> 
@@ -10,7 +11,7 @@ public class Deque<Item> //implements Iterable<Item>
 		int curPos;
 		
 		public DeqItertor(Deque<T> deque) {
-			array_ = deque.data_;
+			array_ = (T[])deque.data_;
 			head_ = deque.head_;
 			tail_ = deque.tail_;
 			curPos = head_;
@@ -109,7 +110,7 @@ public class Deque<Item> //implements Iterable<Item>
 
 //	// return an iterator over items in order from front to end
 	public Iterator<Item> iterator() {
-		
+		return new DeqItertor<Item>(this);
 	}
 
 	private void resize() {
@@ -240,6 +241,15 @@ public class Deque<Item> //implements Iterable<Item>
 		deq.removeFirst();
 		deq.removeFirst();
 		deq.removeFirst();
+		
+		deq.addFirst(second);
+		deq.addFirst(first);
+		Iterator<Integer> it = deq.iterator();
+		assert it.hasNext();
+		assert it.next() == first;
+		assert it.hasNext();
+		assert it.next() == second;
+		assert !it.hasNext();
 	}
 }
 
