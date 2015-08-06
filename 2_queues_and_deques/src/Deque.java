@@ -1,4 +1,3 @@
-import java.io.Console;
 import java.util.Iterator;
 
 public class Deque<Item> //implements Iterable<Item> 
