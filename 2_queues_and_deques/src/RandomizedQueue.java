@@ -11,24 +11,21 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	
 	private class DeqItertor<T> implements Iterator<T>
 	{
-		private int head_;
-		private int curPos;
-		Node<T> head;
+//		RandomizedQueue<T> deque;
 		
-		public DeqItertor(RandomizedQueue<T> deque) {
-			curPos = head_;
-			head = (RandomizedQueue<Item>.Node<T>) deque.head_;
+		public DeqItertor(RandomizedQueue<T> deq) {
+//			deque = deq;
 		}
+
 	    public boolean hasNext() {
-	    	return false;
+	    	return head_.right != null;
 	    }
 
-	    // TODO: реализовать
 	    public T next() {
 	    	if (!hasNext())
 	    		throw new java.util.NoSuchElementException();
 
-	    	return head.value;
+	    	return (T) sample();
 	    }
 	    
 	    public void remove() {
@@ -61,10 +58,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 // remove and return a random item
    public Item dequeue() {
 	   int index = StdRandom.uniform(size_);
-	   // TODO: реализовать.
-//	   removeNode();
-	   return getNode(index).value;
-	   
+	   return removeNode(index).value;
    }
 // return (but do not remove) a random item
    public Item sample() {
@@ -93,10 +87,35 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	   return current;
    }
    
+   private Node<Item> removeNode(int index) {
+	   assert index < size_;
+	   Node<Item> node = getNode(index);
+
+	   node.left.right = node.right;
+	   --size_;
+	   return node;
+   }
+   
 	private Node<Item> head_ = null;
-	private Node<Item> tail_ = null;
+	// TODO: использовать для вставки нового элемента
+	private Node<Item> current_ = null;
 	private int size_ = 0;
+
 // unit testing
-   public static void main(String[] args)  { 
-}
+   public static void main(String[] args) throws InterruptedException  { 
+	   RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+	   queue.enqueue(5);
+	   assert queue.dequeue() == 5;
+	   
+	   queue.enqueue(7);
+	   queue.enqueue(9);
+
+	   System.out.println(queue.dequeue());
+	   Thread.sleep(2000);
+	   System.out.println(queue.dequeue());
+	   Thread.sleep(2000);
+	   System.out.println(queue.dequeue());
+	   Thread.sleep(2000);
+   }
+
 }
