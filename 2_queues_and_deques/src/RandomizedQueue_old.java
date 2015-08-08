@@ -1,6 +1,6 @@
 import java.util.Iterator;
 
-public class RandomizedQueue<Item> implements Iterable<Item> {
+public class RandomizedQueue_old<Item> implements Iterable<Item> {
 	private class Node<T>
 	{
 		public Node<T> left;
@@ -11,12 +11,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	
 	private class DeqItertor<T> implements Iterator<T>
 	{
-		private RandomizedQueue<T> deque;
+		private RandomizedQueue_old<T> deque;
 		
-		public DeqItertor(RandomizedQueue<T> deq) {
-			deque = new RandomizedQueue<T>();
+		public DeqItertor(RandomizedQueue_old<T> deq) {
+			deque = new RandomizedQueue_old<T>();
 
-			Node<T> curNode = (RandomizedQueue<Item>.Node<T>) head_;
+			Node<T> curNode = (RandomizedQueue_old<Item>.Node<T>) head_;
 			
 			while (curNode.right != null)
 			{
@@ -41,13 +41,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	    }
 	}
 // construct an empty randomized queue
-   public RandomizedQueue()  {
+   public RandomizedQueue_old()  {
 	   head_ = new Node<Item>();
 	   current_ = head_;
    }
 // is the queue empty?
 	public boolean isEmpty() {
-		return size() == 0;
+		return size_ == 0;
 	}
 // return the number of items on the queue
 	public int size() {
@@ -123,7 +123,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 // unit testing
    public static void main(String[] args) throws InterruptedException  { 
-	   RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+	   RandomizedQueue_old<Integer> queue = new RandomizedQueue_old<Integer>();
 //	   queue.enqueue(5);
 //	   assert queue.dequeue() == 5;
 //	   

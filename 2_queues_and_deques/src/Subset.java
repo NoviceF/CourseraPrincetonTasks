@@ -3,7 +3,7 @@ public class Subset {
    public static void main(String[] args) {
 	   final int k = Integer.parseInt(args[0]);
 	   
-	   RandomizedQueue<String> queue = new RandomizedQueue<String>();
+	   RandomizedQueue_old<String> queue = new RandomizedQueue_old<String>();
 	   
 	   while (!StdIn.isEmpty())
 	   {
