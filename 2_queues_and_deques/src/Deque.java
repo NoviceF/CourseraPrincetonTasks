@@ -1,6 +1,6 @@
 import java.util.Iterator;
 
-public class Deque<Item> //implements Iterable<Item> 
+public class Deque<Item> implements Iterable<Item> 
  {
 	private class DeqItertor<T> implements Iterator<T>
 	{
@@ -183,15 +183,15 @@ public class Deque<Item> //implements Iterable<Item>
 			return true;
 	}
 	
-	int getCap()
-	{
-		return capacity_;
-	}
+//	int getCap()
+//	{
+//		return capacity_;
+//	}
 	
-	int getGrowMultipler()
-	{
-		return growMultipler_;
-	}
+//	int getGrowMultipler()
+//	{
+//		return growMultipler_;
+//	}
 
 	private Item[] data_;
 	private int capacity_ = 4;
@@ -206,7 +206,7 @@ public class Deque<Item> //implements Iterable<Item>
 		Deque<Integer> deq = new Deque<Integer>();
 		assert deq.isEmpty();
 		int baseCap = 4;
-		assert deq.getCap() == baseCap;
+//		assert deq.getCap() == baseCap;
 		int first = 1;
 		int second = 2;
 		deq.addFirst(first);
@@ -217,10 +217,10 @@ public class Deque<Item> //implements Iterable<Item>
 		int removed = deq.removeFirst();
 		assert deq.size() == 1;
 		assert removed == first;
-		int oldCap = deq.getCap();
+//		int oldCap = deq.getCap();
 		deq.addFirst(first);
 		removed = deq.removeLast();
-		assert deq.getCap() == oldCap * deq.getGrowMultipler();
+//		assert deq.getCap() == oldCap * deq.getGrowMultipler();
 		assert removed == second;
 		assert deq.size() == 1;
 		
