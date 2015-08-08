@@ -1,5 +1,6 @@
+import java.util.Iterator;
 
-public class Deque<Item> {// implements Iterable<Item> {
+public class Deque<Item>  implements Iterable<Item> {
 	private class Node<T>
 	{
 		public Node<T> left;
@@ -7,10 +8,40 @@ public class Deque<Item> {// implements Iterable<Item> {
 		
 		public T value;
 	}
+
+	private class DeqItertor<T> implements Iterator<T>
+	{
+		private RandomizedQueue_old<T> deque;
+		
+		public DeqItertor(Deque<T> deq) {
+			deque = new RandomizedQueue_old<T>();
+
+			Node<T> curNode = (Deque<Item>.Node<T>) head_;
+			
+			while (curNode.right != null)
+			{
+				curNode = curNode.right;
+				deque.enqueue(curNode.value);
+			}
+		}
+
+	    public boolean hasNext() {
+	    	return !deque.isEmpty();
+	    }
+
+	    public T next() {
+	    	if (!hasNext())
+	    		throw new java.util.NoSuchElementException();
+
+	    	return deque.dequeue();
+	    }
+	    
+	    public void remove() {
+	    	throw new java.lang.UnsupportedOperationException();
+	    }
+	}
 	// construct an empty deque
    public Deque() {
-	   head_ = new Node<Item>();
-	   tail_ = head_;
    }
 // is the queue empty?
 	public boolean isEmpty() {
@@ -20,9 +51,39 @@ public class Deque<Item> {// implements Iterable<Item> {
 	public int size() {
 		return size_;
 	}
+	
+	private void initHead(Item item) {
+        head_ = new Node<Item>();
+        tail_ = head_;
+        head_.value = item;
+        ++size_;
+	}
+
+	private void deinitHead() {
+        head_ = null;
+        tail_ = head_;
+        size_ = 0;
+	}
 
 // add the item to the front
    public void addFirst(Item item)          {
+		if (item == null)
+			throw new java.lang.NullPointerException();
+
+	   if (size_ == 0)
+	   {
+		   initHead(item);
+		   return;
+	   }
+
+	   Node<Item> node = new Node<Item>();
+	   node.value = item;
+
+	   node.right = head_;
+	   head_.left = node;
+	   head_ = node;
+	   
+	   ++size_;
 	   
    }
 
@@ -33,6 +94,12 @@ public class Deque<Item> {// implements Iterable<Item> {
 			throw new java.lang.NullPointerException();
 		}
 		
+	   if (size_ == 0)
+	   {
+		   initHead(item);
+		   return;
+	   }
+
 	   Node<Item> node = new Node<Item>();
 	   node.value = item;
 	   node.left = tail_;
@@ -42,33 +109,48 @@ public class Deque<Item> {// implements Iterable<Item> {
 	   
 	   ++size_;
    }
-//   public Item removeFirst()                // remove and return the item from the front
-//   public Item removeLast()                 // remove and return the item from the end
-//   public Iterator<Item> iterator()         // return an iterator over items in order from front to end
-
-   private Node<Item> getNode(int pos) {
-	   assert size_ > 0;
-	   assert pos < size_;
-
-	   Node<Item> current = head_.right;
-	   int currIndex = 0;
-	   
-	   while (currIndex != pos) {
-		   current = current.right;
-		   ++currIndex;
-		   assert current != null;
-	   }
-	   
-	   return current;
+// remove and return the item from the front
+   public Item removeFirst()                {
+        if (isEmpty())
+        throw new java.util.NoSuchElementException();
+        
+        Item value = head_.value;
+        removeHead();
+        return value;
    }
    
-   private Node<Item> removeNode(int index) {
-	   assert index < size_;
-	   Node<Item> node = getNode(index);
-
-	   node.left.right = node.right;
+   // remove and return the item from the end
+   public Item removeLast()                 {
+        if (isEmpty())
+        throw new java.util.NoSuchElementException();
+        
+        Item value = tail_.value;
+        removeTail();
+        return value;
+   }
+//   public Iterator<Item> iterator()         // return an iterator over items in order from front to end
+   
+   private void removeHead() {
+	   if (head_.right == null) {
+		   deinitHead();
+		   return;
+	   }
+	   head_.right.left = null;
+	   head_ = head_.right;
+	   
 	   --size_;
-	   return node;
+   }
+
+   private void removeTail() {
+	   if (tail_.left == null) {
+		   deinitHead();
+		   return;
+	   }
+	   
+	   tail_.left.right = null;
+	   tail_ = tail_.left;  
+
+	   --size_;
    }
 
 	private Node<Item> head_ = null;
@@ -77,6 +159,52 @@ public class Deque<Item> {// implements Iterable<Item> {
 // unit testing
    public static void main(String[] args)   {
    
+		Deque<Integer> deq = new Deque<Integer>();
+		assert deq.isEmpty();
+		int baseCap = 4;
+//		assert deq.getCap() == baseCap;
+		int first = 1;
+		int second = 2;
+		deq.addFirst(first);
+		deq.addLast(second);
+		int size = deq.size();
+		assert size == 2;
+		assert !deq.isEmpty();
+		int removed = deq.removeFirst();
+		assert deq.size() == 1;
+		assert removed == first;
+//		int oldCap = deq.getCap();
+		deq.addFirst(first);
+		removed = deq.removeLast();
+//		assert deq.getCap() == oldCap * deq.getGrowMultipler();
+		assert removed == second;
+		assert deq.size() == 1;
+		
+		int third = 3;
+		int fourth = 4;
+		deq.addLast(third);
+		deq.addLast(fourth);
+		assert deq.size() == 3;
+		deq.removeLast();
+		deq.removeLast();
+		deq.removeLast();
+		
+		deq.addFirst(first);
+		deq.addFirst(second);
+		deq.addFirst(third);
+
+		deq.removeFirst();
+		deq.removeFirst();
+		deq.removeFirst();
+		
+		deq.addFirst(second);
+		deq.addFirst(first);
+//		Iterator<Integer> it = deq.iterator();
+//		assert it.hasNext();
+//		assert it.next() == first;
+//		assert it.hasNext();
+//		assert it.next() == second;
+//		assert !it.hasNext();
 
    }
 }
