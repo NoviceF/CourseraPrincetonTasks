@@ -11,30 +11,39 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	
 	private class DeqItertor<T> implements Iterator<T>
 	{
-//		RandomizedQueue<T> deque;
+		private RandomizedQueue<T> deque;
 		
 		public DeqItertor(RandomizedQueue<T> deq) {
-//			deque = deq;
+			deque = new RandomizedQueue<T>();
+
+			Node<T> curNode = (RandomizedQueue<Item>.Node<T>) head_;
+			
+			while (curNode.right != null)
+			{
+				curNode = curNode.right;
+				deque.enqueue(curNode.value);
+			}
 		}
 
 	    public boolean hasNext() {
-	    	return head_.right != null;
+	    	return !deque.isEmpty();
 	    }
 
 	    public T next() {
 	    	if (!hasNext())
 	    		throw new java.util.NoSuchElementException();
 
-	    	return (T) sample();
+	    	return deque.dequeue();
 	    }
 	    
 	    public void remove() {
-	    	throw new  java.lang.UnsupportedOperationException();
+	    	throw new java.lang.UnsupportedOperationException();
 	    }
 	}
 // construct an empty randomized queue
    public RandomizedQueue()  {
 	   head_ = new Node<Item>();
+	   current_ = head_;
    }
 // is the queue empty?
 	public boolean isEmpty() {
@@ -46,17 +55,26 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	}
 // add the item
    public void enqueue(Item item) {
+		if (item == null)
+		{
+			throw new java.lang.NullPointerException();
+		}
+		
 	   Node<Item> node = new Node<Item>();
 	   node.value = item;
-	   node.left = head_;
+	   node.left = current_;
 
-	   head_.right = node;
+	   current_.right = node;
+	   current_ = node;
 	   
 	   ++size_;
    }
 
 // remove and return a random item
    public Item dequeue() {
+        if (isEmpty())
+        throw new java.util.NoSuchElementException();
+        
 	   int index = StdRandom.uniform(size_);
 	   return removeNode(index).value;
    }
@@ -97,25 +115,34 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    }
    
 	private Node<Item> head_ = null;
-	// TODO: использовать для вставки нового элемента
 	private Node<Item> current_ = null;
 	private int size_ = 0;
 
 // unit testing
    public static void main(String[] args) throws InterruptedException  { 
 	   RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
-	   queue.enqueue(5);
-	   assert queue.dequeue() == 5;
+//	   queue.enqueue(5);
+//	   assert queue.dequeue() == 5;
+//	   
+//	   queue.enqueue(7);
+//	   queue.enqueue(9);
+
+//	   System.out.println(queue.dequeue());
+//	   System.out.println(queue.dequeue());
+//	   System.out.println(queue.dequeue());
 	   
+	   queue.enqueue(5);
 	   queue.enqueue(7);
 	   queue.enqueue(9);
-
-	   System.out.println(queue.dequeue());
-	   Thread.sleep(2000);
-	   System.out.println(queue.dequeue());
-	   Thread.sleep(2000);
-	   System.out.println(queue.dequeue());
-	   Thread.sleep(2000);
-   }
+	   
+	   Iterator<Integer> it = queue.iterator();
+       System.out.println(it.next());
+       Thread.sleep(2000);
+	   System.out.println(it.next());
+       Thread.sleep(2000);
+	   System.out.println(it.next());
+	   
+	   
+	   }
 
 }
