@@ -11,29 +11,25 @@ public class Deque<Item>  implements Iterable<Item> {
 
 	private class DeqItertor<T> implements Iterator<T>
 	{
-		private RandomizedQueue_old<T> deque;
-		
-		public DeqItertor(Deque<T> deq) {
-			deque = new RandomizedQueue_old<T>();
+        private Node<T> curNode;
 
-			Node<T> curNode = (Deque<Item>.Node<T>) head_;
-			
-			while (curNode.right != null)
-			{
-				curNode = curNode.right;
-				deque.enqueue(curNode.value);
-			}
+		public DeqItertor() {
+
+			curNode = (Deque<Item>.Node<T>) head_;
 		}
 
 	    public boolean hasNext() {
-	    	return !deque.isEmpty();
+	    	return curNode != null;
 	    }
 
 	    public T next() {
 	    	if (!hasNext())
 	    		throw new java.util.NoSuchElementException();
+	    	
+	    	T value = curNode.value;
+	    	curNode = curNode.right;
 
-	    	return deque.dequeue();
+	    	return value;
 	    }
 	    
 	    public void remove() {
@@ -128,7 +124,10 @@ public class Deque<Item>  implements Iterable<Item> {
         removeTail();
         return value;
    }
-//   public Iterator<Item> iterator()         // return an iterator over items in order from front to end
+// return an iterator over items in order from front to end
+	public Iterator<Item> iterator() {
+		return new DeqItertor<Item>();
+	}
    
    private void removeHead() {
 	   if (head_.right == null) {
@@ -199,12 +198,12 @@ public class Deque<Item>  implements Iterable<Item> {
 		
 		deq.addFirst(second);
 		deq.addFirst(first);
-//		Iterator<Integer> it = deq.iterator();
-//		assert it.hasNext();
-//		assert it.next() == first;
-//		assert it.hasNext();
-//		assert it.next() == second;
-//		assert !it.hasNext();
+		Iterator<Integer> it = deq.iterator();
+		assert it.hasNext();
+		assert it.next() == first;
+		assert it.hasNext();
+		assert it.next() == second;
+		assert !it.hasNext();
 
    }
 }
