@@ -4,22 +4,42 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 	private class DeqItertor implements Iterator<Item>
 	{
-		private int current = 0;
+		private Item[] items;
+		private int size;
 
 		public DeqItertor() {
+			items = (Item[])new Object[size_];
+			
+			for (int i = 0; i < size_; ++i)
+			{
+				items[i] = data_[i];
+			}
+			
+			size = size_;
 		}
 
+
 	    public boolean hasNext() {
-	    	return current < size_;
+	    	return size > 0;
 	    }
 
 	    public Item next() {
 	    	if (!hasNext())
 	    		throw new java.util.NoSuchElementException();
 
-            final int index = StdRandom.uniform(size_);
-            ++current;
-	    	return data_[index];
+            final int index = StdRandom.uniform(size);
+            Item current = items[index];
+
+            final int endPos = size - 1;
+
+            if (index != endPos)
+                items[index] = items[endPos];
+
+            items[endPos] = null;
+
+            --size;
+
+	    	return current;
 	    }
 	    
 	    public void remove() {
@@ -60,7 +80,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	   
 	   final int endPos = size_ - 1;
 	   
-	   if (index != endPos);
+	   if (index != endPos)
            data_[index] = data_[endPos];
            
        data_[endPos] = null;
@@ -74,6 +94,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
    }
 // return (but do not remove) a random item
    public Item sample() {
+        if (isEmpty())
+        throw new java.util.NoSuchElementException();
+
 	   return data_[StdRandom.uniform(size_)];
    }
 // return an independent iterator over items in random order
